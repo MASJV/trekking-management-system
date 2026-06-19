@@ -5,7 +5,7 @@ A Trekking Management app where Admin, Trek Staff and Users manage treks, staff 
 
 ### 19 Jun 2026  
 **Milestone 1 Completed: Database Models and Schema Setup**  
-Created models for admin, user, trek, booking and staff
+Created models for admin, user, trek, booking and staff.
 These database tables are created programatically using python not manually.  
 
 Established relationships wherever required.  

@@ -33,6 +33,9 @@ def login():
             if hasattr(user, "is_blacklisted") and user.is_blacklisted:
                 return render_template('login_error.html')
             
+            if hasattr(user, "status") and user.status == "inactive":
+                return render_template('login_error.html')
+            
             login_user(user)
 
             if user.role == "admin":
@@ -65,6 +68,28 @@ def register_user():
     
     else:
         return render_template('user_register.html')
+    
+@auth_routes.route('/register/staff', methods=['GET', 'POST'])
+def register_staff():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        phone_number = request.form.get('phone_number')
+        email = request.form.get('email')
+        password = request.form.get('password')
+
+        user = Staff.query.filter_by(email=email).first()
+
+        if user:
+            return render_template('register_error.html') # user already exists
+        
+        user = Staff(name = name, phone_number = phone_number, email = email, password = generate_password_hash(password))
+        db.session.add(user)
+        db.session.commit()
+
+        return render_template('register_success.html')
+    
+    else:
+        return render_template('staff_register.html')
     
 @auth_routes.route('/logout')
 @login_required

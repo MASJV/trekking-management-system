@@ -15,3 +15,16 @@ A Staff can be assigned to multiple treks.
 A Trek can have multiple Bookings.
 
 ---
+
+### 20 Jun 2026  
+**Milestone 2 Completed: Authentication and Role Based Access**  
+Created models for admin, user, trek, booking and staff.
+These database tables are created programatically using python not manually.  
+
+Established relationships wherever required.  
+ie.  
+A User can have multiple Bookings.  
+A Staff can be assigned to multiple treks.
+A Trek can have multiple Bookings.
+
+---

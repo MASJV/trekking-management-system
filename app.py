@@ -8,6 +8,7 @@ from werkzeug.security import generate_password_hash
 from routes.admin import admin_routes
 from routes.auth import auth_routes
 from routes.user import user_routes
+from routes.staff import staff_routes
 from flask_login import LoginManager
 
 app = Flask(__name__)
@@ -18,6 +19,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.register_blueprint(admin_routes)
 app.register_blueprint(auth_routes)
 app.register_blueprint(user_routes)
+app.register_blueprint(staff_routes)
 
 db.init_app(app) # initialize the db with the Flask app
 

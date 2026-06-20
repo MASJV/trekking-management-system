@@ -45,6 +45,27 @@ def login():
     else:
         return render_template("login.html")
     
+@auth_routes.route('/register/user', methods=['GET', 'POST'])
+def register_user():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        email = request.form.get('email')
+        password = request.form.get('password')
+
+        user = User.query.filter_by(email=email).first()
+
+        if user:
+            return render_template('register_error.html') # user already exists
+        
+        user = User(name = name, email = email, password = generate_password_hash(password))
+        db.session.add(user)
+        db.session.commit()
+
+        return render_template('register_success.html')
+    
+    else:
+        return render_template('user_register.html')
+    
 @auth_routes.route('/logout')
 @login_required
 def logout():

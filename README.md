@@ -19,7 +19,7 @@ A Trek can have multiple Bookings.
 ### 20 Jun 2026  
 **Milestone 2 Completed: Authentication and Role Based Access**  
 Implemented Admin login.
-Implemented User(Trekker) and Staff registration + login
+Implemented User(Trekker) and Staff registration + login 
 
 Established role-specific dashboards + Restrict dashboard access based on user roles.
 

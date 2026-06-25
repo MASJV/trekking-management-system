@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Treks</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <h3 class="text-center mb-4">Edit Trek</h3>
+                
+                <form method="POST" action="{{ url_for('admin.edit_trek', trek_id=trek_id) }}">
+                    <div class="mb-3">
+                        <label class="form-label">Trek Name</label>
+                        <input type="text" name="trek_name" class="form-control" value="{{ data.get('trek_name','') }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Location</label>
+                        <input type="text" name="location" class="form-control" value="{{ data.get('location','') }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Difficulty</label>
+                        <select name="difficulty" class="form-select" required>
+                            <option value="easy" {% if data.get('difficulty')=='easy' %}selected{% endif %}>Easy</option>
+                            <option value="moderate" {% if data.get('difficulty')=='moderate' %}selected{% endif %}>Moderate</option>
+                            <option value="hard" {% if data.get('difficulty')=='hard' %}selected{% endif %}>Hard</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Duration (Days)</label>
+                        <input type="number" name="duration" class="form-control" value="{{ data.get('duration','') }}" min="1" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Available Slots</label>
+                        <input type="number" name="available_slots" class="form-control" value="{{ data.get('available_slots','') }}" min="0" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Price</label>
+                        <input type="number" step="0.01" name="price" class="form-control" value="{{ data.get('price','') }}" min="0" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Status</label>
+                        <select name="status" class="form-select" required>
+                            <option value="pending" {% if data.get('status')=='pending' %}selected{% endif %}>Pending</option>
+                            <option value="approved" {% if data.get('status')=='approved' %}selected{% endif %}>Approved</option>
+                            <option value="open" {% if data.get('status')=='open' %}selected{% endif %}>Open</option>
+                            <option value="closed" {% if data.get('status')=='closed' %}selected{% endif %}>Closed</option>
+                            <option value="completed" {% if data.get('status')=='completed' %}selected{% endif %}>Completed</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Start Date</label>
+                        <input type="date" name="start_date" class="form-control" value="{{ data.get('start_date','') }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">End Date</label>
+                        <input type="date" name="end_date" class="form-control" value="{{ data.get('end_date','') }}" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <a href="{{ url_for('admin.manage_treks') }}" class="btn btn-secondary">Cancel</a>
+                </form>
+
+            </div>    
+        </div>
+    </div>
+</body>
+</html>

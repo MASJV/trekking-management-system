@@ -141,4 +141,44 @@ def edit_trek(trek_id):
     
     return render_template('admin_edit_trek.html', data=data, trek_id=trek_id)
 
+@admin_routes.route('/admin/users')
+@login_required
+def manage_users():
+    if current_user.role != "admin":
+        return "Access Denied", 403
+
+    users = User.query.all()
+
+    return render_template('admin_users.html', users=users)
+
+@admin_routes.route('/admin/users/blacklist/<int:user_id>', methods=['POST'])
+@login_required
+def blacklist_user(user_id):
+    if current_user.role != 'admin':
+        return "Access Denied", 403
+
+    user = User.query.get(user_id)
+
+    if user:
+        user.is_blacklisted = True
+        db.session.commit()
+
+    return redirect(url_for('admin.manage_users'))
+
+@admin_routes.route('/admin/users/unblacklist/<int:user_id>', methods=['POST']) 
+@login_required
+def unblacklist_user(user_id):
+    if current_user.role != 'admin':
+        return "Access Denied", 403
+
+    user = User.query.get(user_id)
+
+    if user:
+        user.is_blacklisted = False
+        db.session.commit()
+
+    return redirect(url_for('admin.manage_users'))
+    
+
+
 

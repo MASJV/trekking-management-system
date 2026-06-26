@@ -147,9 +147,20 @@ def manage_users():
     if current_user.role != "admin":
         return "Access Denied", 403
 
-    users = User.query.all()
+    name = (request.args.get('name') or '').strip()
+    is_blacklisted = (request.args.get('is_blacklisted') or '').strip()
 
-    return render_template('admin_users.html', users=users)
+    filters = []
+    if name:
+        filters.append(User.name.ilike(f"%{name}%"))
+    if is_blacklisted == 'True':
+        filters.append(User.is_blacklisted.is_(True))
+    elif is_blacklisted == 'False':
+        filters.append(User.is_blacklisted.is_(False))
+
+    users = User.query.filter(*filters).all()
+
+    return render_template('admin_users.html', users=users, u_name=name, u_isblacklisted=is_blacklisted)
 
 @admin_routes.route('/admin/users/blacklist/<int:user_id>', methods=['POST'])
 @login_required

@@ -9,7 +9,27 @@
             <h2>Manage Users</h2>
             <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-secondary btn-sm mb-3">Back</a>
 
-            <table class="table table-striped">
+            <form method="GET" action="{{url_for('admin.manage_users')}}" class="row g-4 mb-4">
+                <div class="col md-3">
+                    <input type="text" name="name" class="form-control" placeholder="Search name" value="{{ u_name }}">
+                </div>
+
+                <div class="col md-2">
+                    <select name="is_blacklisted" class="form-select">
+                        <option value="">Is Blacklisted</option>
+                        {% for bl in ['False','True'] %}
+                            <option value="{{bl}}" {% if u_isblacklisted==bl %}selected{% endif %}>{{bl|capitalize}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-auto d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                    <a href="{{ url_for('admin.manage_users') }}" class="btn btn-outline-secondary">Clear</a>
+                </div>
+            </form>
+
+            <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th>ID</th>

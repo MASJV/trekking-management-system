@@ -10,6 +10,40 @@
         <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-secondary btn-sm mb-3">Back</a>
         <a href="{{ url_for('admin.add_trek') }}" class="btn btn-primary btn-sm mb-3">+ Add Trek</a>
 
+        <form method="GET" action="{{ url_for('admin.manage_treks') }}" class="row g-4 mb-4">
+            <div class="col-md-3">
+                <input type="text" name="name" class="form-control" placeholder="Search name" value="{{ u_name }}">
+            </div>
+            <div class="col-md-2">
+                <select name="difficulty" class="form-select">
+                    <option value="">Select difficulty</option>
+                    {% for diff in ['easy','moderate','hard'] %}
+                    <option value="{{diff}}" {% if u_difficulty==diff %}selected{% endif %}>{{diff|capitalize}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select name="location" class="form-select">
+                    <option value="">Select location</option>
+                    {% for loc in locations %}
+                    <option value="{{loc}}" {% if u_location==loc %}selected{% endif %}>{{loc}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select name="status" class="form-select">
+                    <option value="">Select status</option>
+                    {% for s in ['pending','approved','open','closed','completed'] %}
+                    <option value="{{s}}" {% if u_status==s %}selected{% endif %}>{{s|capitalize}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary">Filter</button>
+                <a href="{{ url_for('admin.manage_treks') }}" class="btn btn-outline-secondary">Clear</a>
+            </div>
+        </form>
+
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -41,8 +75,8 @@
                     <td>{{ trek.start_date.strftime('%d-%m-%Y') }}</td>
                     <td>{{ trek.end_date.strftime('%d-%m-%Y') }}</td>
                     <td>{{ trek.price }}</td>
-                    <td>staff id</td>
-                    <td>staff name</td>
+                    <td>----</td>
+                    <td>----</td>
                     <td>
                         <a href="{{ url_for('admin.edit_trek', trek_id=trek.trek_id) }}" class="btn btn-warning btn-sm">Edit</a>
                         <form method="POST" action="{{ url_for('admin.delete_trek', trek_id=trek.trek_id) }}" style="display:inline">

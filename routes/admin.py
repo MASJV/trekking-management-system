@@ -35,8 +35,28 @@ def manage_treks():
     if current_user.role != "admin":
         return "Access Denied", 403
 
-    treks = Trek.query.all()
-    return render_template('admin_treks.html', treks=treks)
+    name = (request.args.get('name') or '').strip()
+    difficulty = (request.args.get('difficulty') or '').strip()
+    location = (request.args.get('location') or '').strip()
+    status = (request.args.get('status') or '').strip()
+
+    filters = []
+    if name:
+        filters.append(Trek.trek_name.ilike(f"%{name}%"))
+    if difficulty:
+        filters.append(Trek.difficulty == difficulty)
+    if location:
+        filters.append(Trek.location == location)
+    if status:
+        filters.append(Trek.status == status)
+
+    treks = Trek.query.filter(*filters).all()
+
+    locations = [row[0] for row in db.session.query(Trek.location).distinct().all()]
+
+    return render_template('admin_treks.html', treks=treks, locations=locations,
+                           u_name=name, u_difficulty=difficulty,
+                           u_location=location, u_status=status)
 
 
 @admin_routes.route('/admin/treks/add', methods=['GET', 'POST'])

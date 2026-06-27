@@ -189,7 +189,74 @@ def unblacklist_user(user_id):
         db.session.commit()
 
     return redirect(url_for('admin.manage_users'))
-    
 
+@admin_routes.route('/admin/staff')
+@login_required
+def manage_staff():
+    if current_user.role != 'admin':
+        return "Access Denied", 403
+    
+    name = (request.args.get('name') or '').strip()
+    status = (request.args.get('status') or '').strip()
+
+    filters = []
+    if name:
+        filters.append(Staff.name.ilike(f"%{name}%"))
+
+    if status:
+        filters.append(Staff.status == status.lower())
+
+    staffs = Staff.query.filter(*filters).all()
+
+    return render_template('admin_staffs.html', staffs=staffs, u_name=name, u_status=status)
+
+@admin_routes.route('/admin/staff/unapprove/<int:staff_id>', methods=['POST'])
+@login_required
+def unapprove_staff(staff_id):
+    if current_user.role != "admin":
+        return "Access Denied", 403
+
+    staff = Staff.query.get(staff_id)
+    if staff:
+        staff.is_approved = False
+        db.session.commit()
+
+    return redirect(url_for('admin.manage_staff'))
+
+@admin_routes.route('/admin/staff/approve/<int:staff_id>', methods=['POST'])
+@login_required
+def approve_staff(staff_id):
+    if current_user.role != "admin":
+        return "Access Denied", 403
+
+    staff = Staff.query.get(staff_id)
+    if staff:
+        staff.is_approved = True
+        db.session.commit()
+
+    return redirect(url_for('admin.manage_staff'))
+
+@admin_routes.route('/admin/staff/delete/<int:staff_id>', methods=['POST'])
+@login_required
+def delete_staff(staff_id):
+    if current_user.role != "admin":
+        return "Access Denied", 403
+
+    staff = Staff.query.get(staff_id)
+    if staff:
+        db.session.delete(staff)
+        db.session.commit()
+
+    return redirect(url_for('admin.manage_staff'))
+
+@admin_routes.route('/admin/staff/unapproved')
+@login_required
+def unapproved_staff():
+    if current_user.role != "admin":
+        return "Access Denied", 403
+
+    unapproved_staffs = Staff.query.filter_by(is_approved=False).all()
+
+    return render_template('admin_unapproved_staffs.html', staffs=unapproved_staffs)
 
 

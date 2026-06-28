@@ -37,6 +37,7 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th>Status</th>
+                        <th>Assigned Trek IDs</th>
                         <th>Unapprove Staff</th>
                     </tr>
                 </thead>
@@ -47,6 +48,7 @@
                         <td>{{staff.name}}</td>
                         <td>{{staff.email}}</td>
                         <td>{{staff.status.capitalize()}}</td>
+                        <td>{{staff.trek_ids}}</td>
                         <td>
                             <form method="POST" action="{{ url_for('admin.unapprove_staff', staff_id=staff.staff_id) }}" style="display:inline">
                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Unapprove this staff?')">Unapprove</button>

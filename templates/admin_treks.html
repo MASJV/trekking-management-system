@@ -11,7 +11,10 @@
         <a href="{{ url_for('admin.add_trek') }}" class="btn btn-primary btn-sm mb-3">+ Add Trek</a>
 
         <form method="GET" action="{{ url_for('admin.manage_treks') }}" class="row g-4 mb-4">
-            <div class="col-md-3">
+            <div class="col-md-2">
+                <input type="text" name="trek_id" class="form-control" placeholder="Search ID" value="{{ u_trek_id }}">
+            </div>
+            <div class="col-md-2">
                 <input type="text" name="name" class="form-control" placeholder="Search name" value="{{ u_name }}">
             </div>
             <div class="col-md-2">
@@ -38,7 +41,7 @@
                     {% endfor %}
                 </select>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <button type="submit" class="btn btn-primary">Filter</button>
                 <a href="{{ url_for('admin.manage_treks') }}" class="btn btn-outline-secondary">Clear</a>
             </div>
@@ -57,8 +60,7 @@
                     <th>Start date</th>
                     <th>End date</th>
                     <th>Price</th>
-                    <th>Staff id</th>
-                    <th>Staff name</th>
+                    <th>Assigned Staff</th>
                     <th>Change Trek</th>
                 </tr>
             </thead>
@@ -75,8 +77,17 @@
                     <td>{{ trek.start_date.strftime('%d-%m-%Y') }}</td>
                     <td>{{ trek.end_date.strftime('%d-%m-%Y') }}</td>
                     <td>{{ trek.price }}</td>
-                    <td>----</td>
-                    <td>----</td>
+                    <td>
+                        <form method="POST" action="{{url_for('admin.assign_staff', trek_id=trek.trek_id)}}" class="d-flex gap-1">
+                            <select name="staff_id" class="form-select form-select sm">
+                                <option value="">Unassigned</option>
+                                {% for staff in assignable_staff %}
+                                <option value="{{staff.staff_id}}" {% if trek.assigned_staff_id == staff.staff_id %}selected{% endif %}>{{staff.name}}</option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit" class="btn btn-info btn-sm">Set</button>
+                        </form>
+                    </td>
                     <td>
                         <a href="{{ url_for('admin.edit_trek', trek_id=trek.trek_id) }}" class="btn btn-warning btn-sm">Edit</a>
                         <form method="POST" action="{{ url_for('admin.delete_trek', trek_id=trek.trek_id) }}" style="display:inline">

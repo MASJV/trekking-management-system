@@ -35,12 +35,15 @@ def manage_treks():
     if current_user.role != "admin":
         return "Access Denied", 403
 
+    trek_id = (request.args.get('trek_id') or '').strip()
     name = (request.args.get('name') or '').strip()
     difficulty = (request.args.get('difficulty') or '').strip()
     location = (request.args.get('location') or '').strip()
     status = (request.args.get('status') or '').strip()
 
     filters = []
+    if trek_id.isdigit():
+        filters.append(Trek.trek_id == int(trek_id))
     if name:
         filters.append(Trek.trek_name.ilike(f"%{name}%"))
     if difficulty:
@@ -53,10 +56,12 @@ def manage_treks():
     treks = Trek.query.filter(*filters).all()
 
     locations = [row[0] for row in db.session.query(Trek.location).distinct().all()]
+    assignable_staff = Staff.query.filter_by(is_approved=True, status='active').all()
+
 
     return render_template('admin_treks.html', treks=treks, locations=locations,
-                           u_name=name, u_difficulty=difficulty,
-                           u_location=location, u_status=status)
+                           u_trek_id=trek_id, u_name=name, u_difficulty=difficulty,
+                           u_location=location, u_status=status, assignable_staff=assignable_staff)
 
 
 @admin_routes.route('/admin/treks/add', methods=['GET', 'POST'])
@@ -66,23 +71,29 @@ def add_trek():
         return "Access Denied", 403
 
     if request.method == 'POST':
-        trek = Trek(
-            trek_name = request.form.get('trek_name'),
-            location = request.form.get('location'),
-            difficulty = request.form.get('difficulty'),
-            duration = int(request.form.get('duration')),
-            available_slots = int(request.form.get('available_slots')),
-            price = float(request.form.get('price')),
-            status = request.form.get('status'),
-            start_date = datetime.strptime(request.form.get('start_date'), '%Y-%m-%d'),
-            end_date = datetime.strptime(request.form.get('end_date'), '%Y-%m-%d')
-        )
+        try:
+            trek = Trek(
+                trek_name=request.form['trek_name'].strip(),
+                location=request.form['location'].strip(),
+                difficulty=request.form['difficulty'].strip(),
+                duration=int(request.form['duration']),
+                available_slots=int(request.form['available_slots']),
+                price=float(request.form['price']),
+                status=request.form['status'].strip(),
+                start_date=datetime.strptime(request.form['start_date'], '%Y-%m-%d'),
+                end_date=datetime.strptime(request.form['end_date'], '%Y-%m-%d'),
+            )
+            if trek.end_date < trek.start_date:
+                raise ValueError
+                
+        except(KeyError, ValueError):
+            return redirect(url_for('admin.add_trek'))
         db.session.add(trek)
         db.session.commit()
+        
+        return redirect(url_for('admin.manage_treks'))
 
-        return redirect(url_for('admin.manage_treks'))   
-
-    return render_template('admin_add_trek.html')  
+    return render_template('admin_add_trek.html')
 
 @admin_routes.route('/admin/treks/delete/<int:trek_id>', methods=['POST'])
 @login_required
@@ -205,8 +216,19 @@ def manage_staff():
 
     if status:
         filters.append(Staff.status == status.lower())
+    
+    filters.append(Staff.is_approved.is_(True))  # Only shows approved staff
 
     staffs = Staff.query.filter(*filters).all()
+
+    for s in staffs:
+        s.trek_ids = ""
+        for t in s.treks:
+            s.trek_ids = s.trek_ids.join([str(t.trek_id), ", "])
+        s.trek_ids = s.trek_ids.rstrip(", ")
+        
+        if len(s.trek_ids) < 1:
+            s.trek_ids = "None"
 
     return render_template('admin_staffs.html', staffs=staffs, u_name=name, u_status=status)
 
@@ -219,6 +241,8 @@ def unapprove_staff(staff_id):
     staff = Staff.query.get(staff_id)
     if staff:
         staff.is_approved = False
+        for trek in staff.treks:
+            trek.assigned_staff_id = None  # unassign treks allotted to staff
         db.session.commit()
 
     return redirect(url_for('admin.manage_staff'))
@@ -244,6 +268,9 @@ def delete_staff(staff_id):
 
     staff = Staff.query.get(staff_id)
     if staff:
+        for trek in staff.treks:
+            trek.assigned_staff_id = None  
+
         db.session.delete(staff)
         db.session.commit()
 
@@ -259,4 +286,24 @@ def unapproved_staff():
 
     return render_template('admin_unapproved_staffs.html', staffs=unapproved_staffs)
 
-
+@admin_routes.route('/admin/treks/assign_staff/<int:trek_id>', methods=['POST'])
+@login_required
+def assign_staff(trek_id):
+    if current_user.role != "admin":
+        return "Access Denied", 403
+    
+    trek = Trek.query.get(trek_id)
+    if not trek:
+        return redirect(url_for('admin.manage_treks'))
+    
+    staff_id = request.form.get('staff_id')
+    if not staff_id:
+        trek.assigned_staff_id = None
+    else:
+        staff = Staff.query.get(staff_id) # no error as staff id exists!?
+    
+        if staff and staff.is_approved and staff.status == 'active':
+            trek.assigned_staff_id = staff.staff_id
+        
+    db.session.commit()
+    return redirect(url_for('admin.manage_treks'))

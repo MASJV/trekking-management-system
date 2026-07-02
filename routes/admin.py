@@ -310,7 +310,7 @@ def assign_staff(trek_id):
     if not staff_id:
         trek.assigned_staff_id = None
     else:
-        staff = Staff.query.get(staff_id) # no error as staff id exists!?
+        staff = Staff.query.get(staff_id) 
     
         if staff and staff.is_approved and staff.status == 'active':
             trek.assigned_staff_id = staff.staff_id

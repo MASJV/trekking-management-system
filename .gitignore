@@ -1,5 +1,5 @@
 __pycache__/
 *.pyc
-instance/trekking.db
+instance/
 venv/
 .venv/

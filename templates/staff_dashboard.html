@@ -10,18 +10,27 @@
 <body>
 
 <div class="container mt-5">
-    <h2>Staff Dashboard</h2>
-    <p class="text-muted">Welcome, Staff's Name</p> 
-
+    <h2 class = "text-center">Staff Dashboard</h2>
+    <p class="text-muted text-center">Welcome, {{current_user.name}}</p>
+    <a href="{{url_for('staff.edit_profile', staff_id=current_user.staff_id)}}" class="btn btn-primary mb-3">Edit Profile</a>
     <hr>
-
-    <ul>
-        <li>Access Assigned Treks</li>
-        <li>Update Trek Slots</li>
-        <li>Update Trek Status</li>
-    </ul>
-
-    <a href="{{ url_for('auth.logout') }}" class="btn btn-danger mt-3">Logout</a>
+    <div class="row g-5 justify-content-center">
+        <div class="col-md-3">
+            <a href="{{url_for('staff.staff_treks')}}" class="text-decoration-none text-dark">
+                <div class="card text-center p-3">
+                    <h6 class="text-muted">Assigned Treks</h6>
+                    <h2>{{assigned_treks_count}}</h2>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3 justify">
+            <div class="card text-center p-3">
+                <h6 class="text-muted">Registered Trekkers</h6>
+                <h2>{{ total_registerred_trekkers }}</h2>
+            </div>
+        </div>
+    </div>
+    <a href="{{url_for('auth.logout')}}" class="btn btn-danger" style="position: relative; left: 1200px; bottom: -50px;">Logout</a>
 </div>
 
 </body>

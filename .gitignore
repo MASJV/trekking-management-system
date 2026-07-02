@@ -1,5 +1,5 @@
 __pycache__/
 *.pyc
-database.sqlite3
+instance/trekking.db
 venv/
 .venv/

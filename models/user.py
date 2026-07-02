@@ -7,6 +7,7 @@ class User(db.Model, UserMixin):
     user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100), nullable=False) 
     email = db.Column(db.String(100), unique=True, nullable=False)
+    ## ADD PHONE NUMBER RIGHT
     password = db.Column(db.String(255), nullable=False)
     is_blacklisted = db.Column(db.Boolean, default=False)
 

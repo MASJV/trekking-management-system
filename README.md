@@ -40,3 +40,27 @@ Added Staff management with approve, unapprove, and delete + staff to trek assig
 Unapproving or deleting a staff revokes their trek assignments.
 
 ---
+
+### 2nd July 2026  
+**Milestone 4 & 5 Completed: Trek Staff Dashboard and Trek Management, User Dashboard and Trek Booking System**  
+
+Added following to Staff functionalities/Dashboard:  
+    Staff can register, login and edit his/her profile.  
+    Staff can access and manage only their assigned treks.  
+    Staff dashboard shows assigned treks count and total registered trekkers count.  
+    Staff can update available trek slots and trek status(open, closed, started, ongoing, completed).  
+    Staff can view and manage the participant list of assigned treks(remove a participant frees a slot).  
+    Only the assigned staff can manage a given trek.  
+
+Added following to User(Trekker) functionalities/Dashboard:  
+    User can register, login and edit his/her profile.  
+    User can view available/open treks and filter them by difficulty and location.  
+    User can book a trek and track its booking status.  
+    User can view booked treks, trek status and trekking history.  
+    Duplicate bookings are prevented, and booking is blocked when a trek is full or closed.  
+
+Added a payment_status field to Booking; Admin marks payment as paid/pending(offline payment).  
+
+Booking or removing a participant will keep available slots in sync automatically.  
+
+---

@@ -46,10 +46,12 @@
             </div>
             
             <div class="col-md-3">
-                <div class="card text-center p-3">
-                    <h6 class="text-muted">Total Bookings</h6>
-                    <h2>{{ total_bookings }}</h2>
-                </div>
+                <a href="{{ url_for('admin.manage_bookings') }}" class="text-decoration-none text-dark">
+                    <div class="card text-center p-3">
+                        <h6 class="text-muted">Total Bookings</h6>
+                        <h2>{{ total_bookings }}</h2>
+                    </div>
+                </a>
             </div>
         </div>
     </div>

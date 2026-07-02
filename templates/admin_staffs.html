@@ -11,6 +11,10 @@
             <a href="{{ url_for('admin.unapproved_staff') }}" class="btn btn-success btn-sm mb-3">Approve Staff</a>
 
             <form method="GET" action="{{url_for('admin.manage_staff')}}" class="row g-4 mb-4">
+                <div class="col md-2">
+                    <input type="text" name="staff_id" class="form-control" placeholder="Search ID" value="{{ u_staff_id }}">
+                </div>
+                
                 <div class="col md-3">
                     <input type="text" name="name" class="form-control" placeholder="Search name" value="{{ u_name }}">
                 </div>

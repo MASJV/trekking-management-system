@@ -8,12 +8,14 @@ class Booking(db.Model):
     trek_id = db.Column(db.Integer, db.ForeignKey('treks.trek_id'), nullable=False)
     booking_date = db.Column(db.DateTime, nullable=False)
     status = db.Column(db.String(20), nullable=False) # 'booked', 'cancelled', or 'completed'
-    
+    payment_status = db.Column(db.String(20), nullable=False, default='pending')  # 'pending' or 'paid'
+
     def get_details(self):
         return {
             "booking_id": self.booking_id,
             "user_id": self.user_id,
             "trek_id": self.trek_id,
             "status": self.status,
-            "booking_date": self.booking_date
+            "booking_date": self.booking_date,
+            "payment_status": self.payment_status
         }

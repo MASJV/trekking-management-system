@@ -158,10 +158,13 @@ def manage_users():
     if current_user.role != "admin":
         return "Access Denied", 403
 
+    user_id = (request.args.get('user_id') or '').strip()
     name = (request.args.get('name') or '').strip()
     is_blacklisted = (request.args.get('is_blacklisted') or '').strip()
 
     filters = []
+    if user_id.isdigit():
+        filters.append(User.user_id == int(user_id))
     if name:
         filters.append(User.name.ilike(f"%{name}%"))
     if is_blacklisted == 'True':
@@ -171,7 +174,8 @@ def manage_users():
 
     users = User.query.filter(*filters).all()
 
-    return render_template('admin_users.html', users=users, u_name=name, u_isblacklisted=is_blacklisted)
+    return render_template('admin_users.html', users=users, u_user_id=user_id,
+                           u_name=name, u_isblacklisted=is_blacklisted)
 
 @admin_routes.route('/admin/users/blacklist/<int:user_id>', methods=['POST'])
 @login_required
@@ -207,10 +211,13 @@ def manage_staff():
     if current_user.role != 'admin':
         return "Access Denied", 403
     
+    staff_id = (request.args.get('staff_id') or '').strip()
     name = (request.args.get('name') or '').strip()
     status = (request.args.get('status') or '').strip()
 
     filters = []
+    if staff_id.isdigit():
+        filters.append(Staff.staff_id == int(staff_id))
     if name:
         filters.append(Staff.name.ilike(f"%{name}%"))
 
@@ -224,13 +231,16 @@ def manage_staff():
     for s in staffs:
         s.trek_ids = ""
         for t in s.treks:
-            s.trek_ids = s.trek_ids.join([str(t.trek_id), ", "])
-        s.trek_ids = s.trek_ids.rstrip(", ")
-        
-        if len(s.trek_ids) < 1:
+            if s.trek_ids == "": 
+                s.trek_ids = str(t.trek_id)
+            else:
+                s.trek_ids = s.trek_ids + ", " + str(t.trek_id) 
+
+        if s.trek_ids == "":
             s.trek_ids = "None"
 
-    return render_template('admin_staffs.html', staffs=staffs, u_name=name, u_status=status)
+    return render_template('admin_staffs.html', staffs=staffs, u_staff_id=staff_id,
+                           u_name=name, u_status=status)
 
 @admin_routes.route('/admin/staff/unapprove/<int:staff_id>', methods=['POST'])
 @login_required
@@ -307,3 +317,39 @@ def assign_staff(trek_id):
         
     db.session.commit()
     return redirect(url_for('admin.manage_treks'))
+
+@admin_routes.route('/admin/bookings')
+@login_required
+def manage_bookings():
+    if current_user.role != "admin":
+        return "Access Denied", 403
+
+    user_id = (request.args.get('user_id') or '').strip()
+    trek_id = (request.args.get('trek_id') or '').strip()
+    status = (request.args.get('status') or '').strip()
+
+    filters = []
+    if user_id.isdigit():
+        filters.append(Booking.user_id == int(user_id))
+    if trek_id.isdigit():
+        filters.append(Booking.trek_id == int(trek_id))
+    if status:
+        filters.append(Booking.status == status)
+
+    bookings = Booking.query.filter(*filters).order_by(Booking.booking_date.desc()).all()
+
+    return render_template('admin_bookings.html', bookings=bookings,
+                           u_user_id=user_id, u_trek_id=trek_id, u_status=status)
+
+@admin_routes.route('/admin/bookings/payment/<int:booking_id>', methods=['POST'])
+@login_required
+def toggle_payment(booking_id):
+    if current_user.role != "admin":
+        return "Access Denied", 403
+
+    booking = Booking.query.get(booking_id)
+    if booking:
+        booking.payment_status = 'paid' if booking.payment_status != 'paid' else 'pending'
+        db.session.commit()
+
+    return redirect(url_for('admin.manage_bookings'))

@@ -28,7 +28,7 @@
                     <td>{{ trek.location }}</td>
                     <td>{{ trek.status }}</td>
                     <td>{{ trek.available_slots }}</td>
-                    <td>{{ trek.bookings | length }}</td>
+                    <td>{{ trek.registered_count}}</td>
                     <td><a href="{{ url_for('staff.trek_detail', trek_id=trek.trek_id) }}" class="btn btn-info btn-sm">View in detail</a></td>
                 </tr>
                 {% else %}

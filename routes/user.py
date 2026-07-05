@@ -12,7 +12,7 @@ user_routes = Blueprint('user', __name__)
 @login_required
 def user_dashboard():
     if current_user.role != 'user':
-        return "Access Denied", 403 # need to add redirect to login page
+        return "Access Denied", 403 # need to add redirect to login page?
 
     difficulty = (request.args.get('difficulty') or '').strip().lower()
     location = (request.args.get('location') or '').strip()
@@ -23,7 +23,7 @@ def user_dashboard():
     if location:
         filters.append(Trek.location == location)
 
-    booked_treks = [Trek.query.get(booking.trek_id) for booking in current_user.bookings]
+    booked_treks = [Trek.query.get(booking.trek_id) for booking in current_user.bookings if booking.status != "cancelled"]
     treks = Trek.query.filter(Trek.status == 'open').filter(*filters).all()
     treks = [trek for trek in treks if trek not in booked_treks]
 
@@ -37,7 +37,7 @@ def user_treks():
     if current_user.role != 'user':
         return "Access Denied", 403
 
-    booked_trek_ids = [booking.trek_id for booking in current_user.bookings]
+    booked_trek_ids = [booking.trek_id for booking in current_user.bookings if booking.status == "completed"]
     treks = Trek.query.filter(Trek.trek_id.in_(booked_trek_ids), Trek.status == 'completed').all()
     
     return render_template('user_treks.html', treks=treks)
@@ -92,8 +92,17 @@ def book_trek(trek_id):
     if trek.available_slots is None or trek.available_slots < 1:
         return "No slots available for this trek", 400
     
-    if Booking.query.filter_by(user_id=current_user.user_id, trek_id=trek_id).first():
-        return "You have already booked this trek", 400
+    booking = Booking.query.filter_by(user_id=current_user.user_id, trek_id=trek_id).first()
+    if booking:
+        if booking.status in ["booked", "completed"]:
+            return "You have already booked this trek", 400
+        
+        else:
+            booking.status = "booked"
+            trek.available_slots -= 1
+            db.session.commit()
+            return redirect(url_for('user.booked_treks', trek_id=trek_id))
+
 
     booking = Booking(
         user_id=current_user.user_id,
@@ -114,7 +123,7 @@ def booked_treks():
     if current_user.role != 'user':
         return "Access Denied", 403
 
-    booked_treks = [Trek.query.get(booking.trek_id) for booking in current_user.bookings]
+    booked_treks = [Trek.query.get(booking.trek_id) for booking in current_user.bookings if booking.status != "cancelled"]
 
     return render_template('user_booked_treks.html', treks=booked_treks)
 
@@ -128,13 +137,15 @@ def cancel_booking(trek_id):
     if not booking:
         return "Booking not found", 404
 
-    trek = Trek.query.filter_by(trek_id=trek_id).first()
-    if not trek:
-        return "Trek not found", 404
+    if(booking.status != "cancelled"):
+        booking.status = "cancelled"
 
-    trek.available_slots += 1
-    db.session.add(trek)
-    db.session.delete(booking)
-    db.session.commit()
+        trek = Trek.query.filter_by(trek_id=trek_id).first()
+        if not trek:
+            return "Trek not found", 404
+
+        trek.available_slots += 1
+        db.session.add(trek)
+        db.session.commit()
 
     return redirect(url_for('user.booked_treks'))

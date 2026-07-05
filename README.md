@@ -39,6 +39,9 @@ Added Staff management with approve, unapprove, and delete + staff to trek assig
 
 Unapproving or deleting a staff revokes their trek assignments.
 
+Bug faced & fixed:  
+    - Assigned Trek IDs column showed merged wrong output (eg "53" instead of "3,5") due to wrong join syntax -> fixed by building the id string correctly.
+
 ---
 
 ### 2nd July 2026  
@@ -62,5 +65,33 @@ Added following to User(Trekker) functionalities/Dashboard:
 Added a payment_status field to Booking; Admin marks payment as paid/pending(offline payment).  
 
 Booking or removing a participant will keep available slots in sync automatically.  
+
+Bugs faced & fixed:  
+    - Marking a trek Completed crashed as it used trek.assigned_staff which does not exist -> used the correct relationship, and validated the end date before updating status.  
+    - Trek statuses Started/Ongoing were not selectable in the dropdown -> added them.
+
+---
+
+### 5th July, 2026
+**Milestone 6 Completed: Trek Booking History and Trek Status Tracking**  
+
+Maintained complete trekking history per user (booked + completed treks).  
+
+Booking records and trek completion details visile to Admin.  
+
+Booking allowed only when trek status is Open, and blocked once slots are full. (prevents overbooking)
+
+Maintain trek booking statuses (Booked / Cancelled / Completed).
+On cancelling, the booking is soft-cancelled (recored not deleted just marked  and slot is freed)
+On rebooking a cancelled trek, the same booking row is utilized instead of making a duplicate.  
+When a trek is marked Completed, all of its non-cancelled bookings are marked Completed as well.  
+
+Trek status tracking maintained (Pending / Approved / Open / Closed / Completed).  
+
+Bugs faced & fixed:  
+    - Earlier cancelling deleted the booking row so Cancelled history was lost -> switched to soft-cancel (only status changed to cancelled).    
+    - Participant list and trekker counts were also counting cancelled bookings -> filtered them out.  
+    - Cancelling an already cancelled booking inflated available slots -> added a safety guard.  
+    - Staff dashboard trekker count compared the bookings list to a string and updated the wrong variable -> fixed to count booking.status correctly.  
 
 ---

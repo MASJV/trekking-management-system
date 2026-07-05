@@ -349,6 +349,8 @@ def toggle_payment(booking_id):
 
     booking = Booking.query.get(booking_id)
     if booking:
+        if booking.status == "cancelled":
+            return "Booking is already cancelled", 200
         booking.payment_status = 'paid' if booking.payment_status != 'paid' else 'pending'
         db.session.commit()
 

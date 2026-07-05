@@ -16,7 +16,12 @@ def staff_dashboard():
         return "Access Denied", 403
     
     assigned_treks_count = len(current_user.treks)
-    total_registerred_trekkers = sum(len(trek.bookings) for trek in current_user.treks)
+    total_registerred_trekkers = 0
+    for trek in current_user.treks:
+        for booking in trek.bookings:
+            if booking.status != "cancelled":
+                total_registerred_trekkers += 1
+
     return render_template('staff_dashboard.html', assigned_treks_count=assigned_treks_count,
                            total_registerred_trekkers=total_registerred_trekkers)
 
@@ -27,6 +32,9 @@ def staff_treks():
         return "Access Denied", 403
     
     treks = current_user.treks
+    for trek in treks:
+        trek.registered_count = sum(1 for b in trek.bookings if b.status != 'cancelled')
+
     return render_template('staff_treks.html', treks=treks)
 
 @staff_routes.route('/staff/treks/<int:trek_id>')
@@ -40,7 +48,7 @@ def trek_detail(trek_id):
     if not trek:
         return "Access Denied", 403
     
-    participants = [User.query.get(b.user_id) for b in trek.bookings]
+    participants = [User.query.get(booking.user_id) for booking in trek.bookings if booking.status != "cancelled"]
     return render_template('staff_trek_detail.html', trek=trek, participants=participants)
 
 @staff_routes.route('/staff/treks/<int:trek_id>/participants/<int:user_id>/remove', methods=['POST'])
@@ -55,9 +63,10 @@ def remove_participant(trek_id, user_id):
 
     booking = Booking.query.filter_by(trek_id=trek_id, user_id=user_id).first()
     if booking:
-        trek.available_slots += 1
-        db.session.delete(booking)
-        db.session.commit()
+        if booking.status != "cancelled":
+            booking.status = "cancelled"
+            trek.available_slots += 1
+            db.session.commit()
 
     return redirect(url_for('staff.trek_detail', trek_id=trek_id))
 
@@ -83,7 +92,8 @@ def update_trek(trek_id):
             current_user.number_of_treks_completed += 1
 
         for booking in trek.bookings:
-            booking.status = "completed"
+            if booking.status != "cancelled":
+                booking.status = "completed"
 
     if new_status in ['open', 'closed', 'completed', 'started', 'ongoing']:
         trek.status = new_status

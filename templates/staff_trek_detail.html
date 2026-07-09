@@ -1,65 +1,61 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>My Assigned Treks</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container mt-5">
-        <a href="{{ url_for('staff.staff_treks') }}" class="btn btn-secondary btn-md mb-3">Back to My Treks</a>
-        <h2 class="text-center">{{ trek.trek_name }}</h2>
-        <ul>
-            <li class="text-center">Difficulty: {{ trek.difficulty }}</li>
-            <li class="text-center">Duration: {{ trek.duration }} days</li>
-            <li class="text-center">Dates: {{ trek.start_date.strftime('%d-%m-%Y') }} to {{ trek.end_date.strftime('%d-%m-%Y') }}</li>
-            <li class="text-center">Price: {{ trek.price }}</li>
-            <li class="text-center">Available slots: {{ trek.available_slots }}</li>
-            <li class="text-center">Status: {{ trek.status }}</li>
-        </ul>
+{% extends "base.html" %}
+{% block title %}My Assigned Treks{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <a href="{{ url_for('staff.staff_treks') }}" class="btn btn-secondary btn-md mb-3">Back to My Treks</a>
+    <h2 class="text-center">{{ trek.trek_name }}</h2>
+    <ul>
+        <li class="text-center">Difficulty: {{ trek.difficulty }}</li>
+        <li class="text-center">Duration: {{ trek.duration }} days</li>
+        <li class="text-center">Dates: {{ trek.start_date.strftime('%d-%m-%Y') }} to {{ trek.end_date.strftime('%d-%m-%Y') }}</li>
+        <li class="text-center">Price: {{ trek.price }}</li>
+        <li class="text-center">Available slots: {{ trek.available_slots }}</li>
+        <li class="text-center">Status: {{ trek.status }}</li>
+    </ul>
 
-        <h5 class="text-center mt-4">Update Status / Available Slots</h5>
-        <form method="POST" action="{{ url_for('staff.update_trek', trek_id=trek.trek_id) }}" class="row g-3 mb-4 justify-content-center">
-            <div class="col-md-3 ml-3">
-                <select name="status" class="form-select">
-                    {% for s in ['open','closed','completed','started','ongoing'] %}
-                    <option value="{{ s }}" {% if trek.status==s %}selected{% endif %}>{{ s|capitalize }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-md-3">
-                <input type="number" name="available_slots" class="form-control" min="0" value="{{ trek.available_slots }}">
-            </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-primary">Set</button>
-            </div>
-        </form>
-
-        <h5  class="text-center mt-4">Registered Participants</h5>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user in participants %}
-                <tr>
-                    <td>{{ user.user_id }}</td>
-                    <td>{{ user.name }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>
-                        <form method="POST" action="{{ url_for('staff.remove_participant', trek_id=trek.trek_id, user_id=user.user_id) }}" style="display:inline">
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Remove this participant?')">Remove</button>
-                        </form>
-                    </td>
-                </tr>
-                {% else %}
-                <tr><td colspan="4" class="text-muted text-center">No participants registered yet.</td></tr>
+    <h5 class="text-center mt-4">Update Status / Available Slots</h5>
+    <form method="POST" action="{{ url_for('staff.update_trek', trek_id=trek.trek_id) }}" class="row g-3 mb-4 justify-content-center">
+        <div class="col-md-3 ml-3">
+            <select name="status" class="form-select">
+                {% for s in ['open','closed','completed','started','ongoing'] %}
+                <option value="{{ s }}" {% if trek.status==s %}selected{% endif %}>{{ s|capitalize }}</option>
                 {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</body>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <input type="number" name="available_slots" class="form-control" min="0" value="{{ trek.available_slots }}">
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary">Set</button>
+        </div>
+    </form>
+
+    <h5  class="text-center mt-4">Registered Participants</h5>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in participants %}
+            <tr>
+                <td>{{ user.user_id }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('staff.remove_participant', trek_id=trek.trek_id, user_id=user.user_id) }}" style="display:inline">
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Remove this participant?')">Remove</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="4" class="text-muted text-center">No participants registered yet.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

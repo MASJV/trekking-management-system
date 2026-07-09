@@ -1,17 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="3;url=/login">
-    <title>Login Failed</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <h4>✗ Login Failed!</h4>
-    <p>Invalid email or password.</p>
-    <h3>OR</h3>
-    <p>Blacklisted, Not approved by Admin or Inactive</p>
-    <p>Redirecting back in 3 seconds...</p>
+{% extends "base.html" %}
+{% block title %}Login Failed{% endblock %}
+{% block extra_head %}<meta http-equiv="refresh" content="3;url=/login">{% endblock %}
+{% block content %}
+<h4>✗ Login Failed!</h4>
+<p>Invalid email or password.</p>
+<h3>OR</h3>
+<p>Blacklisted, Not approved by Admin or Inactive</p>
+<p>Redirecting back in 3 seconds...</p>
 
-    <a href="/login" class="btn btn-primary">Try Again</a>
-</body>
+<a href="/login" class="btn btn-primary">Try Again</a>
+{% endblock %}

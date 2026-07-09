@@ -77,12 +77,12 @@ Bugs faced & fixed:
 
 Maintained complete trekking history per user (booked + completed treks).  
 
-Booking records and trek completion details visile to Admin.  
+Booking records and trek completion details visible to Admin.  
 
 Booking allowed only when trek status is Open, and blocked once slots are full. (prevents overbooking)
 
 Maintain trek booking statuses (Booked / Cancelled / Completed).
-On cancelling, the booking is soft-cancelled (recored not deleted just marked  and slot is freed)
+On cancelling, the booking is soft-cancelled (recorded not deleted just marked  and slot is freed)
 On rebooking a cancelled trek, the same booking row is utilized instead of making a duplicate.  
 When a trek is marked Completed, all of its non-cancelled bookings are marked Completed as well.  
 
@@ -93,5 +93,18 @@ Bugs faced & fixed:
     - Participant list and trekker counts were also counting cancelled bookings -> filtered them out.  
     - Cancelling an already cancelled booking inflated available slots -> added a safety guard.  
     - Staff dashboard trekker count compared the bookings list to a string and updated the wrong variable -> fixed to count booking.status correctly.  
+
+---
+
+### CORE MILESTONES COMPLETED.
+
+### 9th July, 2026
+**Additional Milestone Completed: Flask-Login Integration**  
+
+Integrated Flask-Login.
+
+Restricted routes based on roles.
+
+Implemented template inheritance for better design choice.
 
 ---

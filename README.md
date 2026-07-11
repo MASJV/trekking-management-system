@@ -108,3 +108,19 @@ Restricted routes based on roles.
 Implemented template inheritance for better design choice.
 
 ---
+
+### 11th July, 2026
+**Additional Milestone Completed: Frontend and Backend Validation**  
+
+Added HTML5 frontend validation (required fields, email type, number min, 10-digit phone length).  
+
+Added backend validation in routes:  
+    Staff phone number must be exactly 10 digits.  
+    Trek end date cannot be before start date -> it would show an error message instead of a silent redirect.  
+
+UX fixes:  
+    Full treks(0 slots) are no longer shown under available/open treks.  
+    Booked Treks page shows only active bookings, completed ones move to Trekking History.  
+    Fixed logout button positioning.
+
+---

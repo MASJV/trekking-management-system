@@ -31,12 +31,12 @@
                 <td><a href="{{ url_for('user.trek_detail', trek_id=trek.trek_id) }}" class="btn btn-info btn-sm">View in detail</a></td>
                 <td>
                     <form method="POST" action="{{ url_for('user.cancel_booking', trek_id=trek.trek_id) }}">
-                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to cancel this booking?')">Cancel</button>
+                        <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
                     </form>
                 </td>
             </tr>
             {% else %}
-            <tr><td colspan="7" class="text-muted text-center">No Treks have been booked.</td></tr>
+            <tr><td colspan="9" class="text-muted text-center">No Treks have been booked.</td></tr>
             {% endfor %}
         </tbody>
     </table>

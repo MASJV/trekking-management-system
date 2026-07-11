@@ -132,6 +132,9 @@ def edit_profile(staff_id):
         if not name or not email or not phone_number:
             return "All fields are required", 400
 
+        if not phone_number.isdigit() or len(phone_number) != 10:
+            return "Phone number must be exactly 10 digits", 400
+
         staff.name = name
         staff.email = email
         staff.phone_number = phone_number

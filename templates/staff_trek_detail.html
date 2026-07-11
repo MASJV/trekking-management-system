@@ -48,7 +48,7 @@
                 <td>{{ user.email }}</td>
                 <td>
                     <form method="POST" action="{{ url_for('staff.remove_participant', trek_id=trek.trek_id, user_id=user.user_id) }}" style="display:inline">
-                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Remove this participant?')">Remove</button>
+                        <button type="submit" class="btn btn-danger btn-sm">Remove</button>
                     </form>
                 </td>
             </tr>

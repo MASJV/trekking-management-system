@@ -83,14 +83,15 @@ def add_trek():
                 start_date=datetime.strptime(request.form['start_date'], '%Y-%m-%d'),
                 end_date=datetime.strptime(request.form['end_date'], '%Y-%m-%d'),
             )
-            if trek.end_date < trek.start_date:
-                raise ValueError
-                
         except(KeyError, ValueError):
-            return redirect(url_for('admin.add_trek'))
+            return render_template('admin_add_trek.html', error="Please fill all fields with valid values.")
+
+        if trek.end_date < trek.start_date:
+            return render_template('admin_add_trek.html', error="End date cannot be before start date.")
+
         db.session.add(trek)
         db.session.commit()
-        
+
         return redirect(url_for('admin.manage_treks'))
 
     return render_template('admin_add_trek.html')
@@ -130,11 +131,15 @@ def edit_trek(trek_id):
             trek.status = request.form['status'].strip()
             trek.start_date = datetime.strptime(request.form['start_date'], '%Y-%m-%d')
             trek.end_date = datetime.strptime(request.form['end_date'], '%Y-%m-%d')
-            if trek.end_date < trek.start_date:
-                raise ValueError
+            
         except(KeyError, ValueError):
-            return redirect(url_for('admin.edit_trek', trek_id=trek_id))
-        
+            return render_template('admin_edit_trek.html', data=request.form, trek_id=trek_id,
+                                   error="Please fill all fields with valid values.")
+
+        if trek.end_date < trek.start_date:
+            return render_template('admin_edit_trek.html', data=request.form, trek_id=trek_id,
+                                   error="End date cannot be before start date.")
+
         db.session.commit()
         return redirect(url_for('admin.manage_treks'))
     

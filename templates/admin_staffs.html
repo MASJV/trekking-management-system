@@ -51,7 +51,7 @@
                     <td>{{staff.trek_ids}}</td>
                     <td>
                         <form method="POST" action="{{ url_for('admin.unapprove_staff', staff_id=staff.staff_id) }}" style="display:inline">
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Unapprove this staff?')">Unapprove</button>
+                            <button type="submit" class="btn btn-danger btn-sm">Unapprove</button>
                         </form>
                     </td>
 

@@ -24,10 +24,10 @@
                     <td>{{staff.status.capitalize()}}</td>
                     <td>
                         <form method="POST" action="{{ url_for('admin.approve_staff', staff_id=staff.staff_id) }}" style="display:inline">
-                            <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('Approve this staff?')">Approve</button>
+                            <button type="submit" class="btn btn-success btn-sm">Approve</button>
                         </form>
                         <form method="POST" action="{{ url_for('admin.delete_staff', staff_id=staff.staff_id) }}" style="display:inline">
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Delete this staff?')">Delete</button>
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                         </form>
                     </td>
 

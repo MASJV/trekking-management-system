@@ -48,10 +48,10 @@
                     <td>{{user.is_blacklisted}}</td>
                     <td>
                         <form method="POST" action="{{ url_for('admin.blacklist_user', user_id=user.user_id) }}" style="display:inline">
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Blacklist this user?')">Blacklist</button>
+                            <button type="submit" class="btn btn-danger btn-sm">Blacklist</button>
                         </form>
                         <form method="POST" action="{{ url_for('admin.unblacklist_user', user_id=user.user_id) }}" style="display:inline">
-                            <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('Unblacklist this user?')">UnBlacklist</button>
+                            <button type="submit" class="btn btn-success btn-sm">UnBlacklist</button>
                         </form>
                     </td>
 

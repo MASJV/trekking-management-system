@@ -24,7 +24,7 @@ def user_dashboard():
         filters.append(Trek.location == location)
 
     booked_treks = [Trek.query.get(booking.trek_id) for booking in current_user.bookings if booking.status != "cancelled"]
-    treks = Trek.query.filter(Trek.status == 'open').filter(*filters).all()
+    treks = Trek.query.filter(Trek.status == 'open', Trek.available_slots > 0).filter(*filters).all()
     treks = [trek for trek in treks if trek not in booked_treks]
 
     locations = [row[0] for row in db.session.query(Trek.location).distinct().all()]
@@ -123,7 +123,7 @@ def booked_treks():
     if current_user.role != 'user':
         return "Access Denied", 403
 
-    booked_treks = [Trek.query.get(booking.trek_id) for booking in current_user.bookings if booking.status != "cancelled"]
+    booked_treks = [Trek.query.get(booking.trek_id) for booking in current_user.bookings if booking.status == "booked"]
 
     return render_template('user_booked_treks.html', treks=booked_treks)
 

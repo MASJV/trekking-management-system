@@ -87,7 +87,7 @@
                 <td>
                     <a href="{{ url_for('admin.edit_trek', trek_id=trek.trek_id) }}" class="btn btn-warning btn-sm">Edit</a>
                     <form method="POST" action="{{ url_for('admin.delete_trek', trek_id=trek.trek_id) }}" style="display:inline">
-                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Delete this trek?')">Remove</button>
+                        <button type="submit" class="btn btn-danger btn-sm">Remove</button>
                     </form>
                 </td>
 

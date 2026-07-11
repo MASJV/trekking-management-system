@@ -61,13 +61,13 @@
                         <td><a href="{{ url_for('user.trek_detail', trek_id=trek.trek_id) }}" class="btn btn-info btn-sm">View in detail</a></td>
                         <td>
                             <form method="POST" action="{{ url_for('user.book_trek', trek_id=trek.trek_id) }}">
-                                <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('Are you sure you want to book this trek?')">Book Trek</button>
+                                <button type="submit" class="btn btn-success btn-sm">Book Trek</button>
                             </form>
                         </td>
                     </tr>
                     {% else %}
                     <tr>
-                        <td colspan="6" class="text-muted text-center">No treks available/open.</td>
+                        <td colspan="7" class="text-muted text-center">No treks available/open.</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -75,6 +75,6 @@
         </div>
     </div>
 </div>
-<a href="{{url_for('auth.logout')}}" class="btn btn-danger" style="position: relative; left: 1200px; bottom: -50px;">Logout</a>
+<a href="{{url_for('auth.logout')}}" class="btn btn-danger mt-4">Logout</a>
 </div>
 {% endblock %}

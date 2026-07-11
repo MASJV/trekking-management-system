@@ -77,11 +77,14 @@ def register_staff():
         email = request.form.get('email')
         password = request.form.get('password')
 
+        if not phone_number or not phone_number.isdigit() or len(phone_number) != 10:
+            return render_template('register_error.html')  # phone number invalid
+
         user = Staff.query.filter_by(email=email).first()
 
         if user:
             return render_template('register_error.html') # user already exists
-        
+
         user = Staff(name = name, phone_number = phone_number, email = email, password = generate_password_hash(password))
         db.session.add(user)
         db.session.commit()

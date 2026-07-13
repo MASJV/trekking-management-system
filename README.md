@@ -124,3 +124,15 @@ UX fixes:
     Fixed logout button positioning.
 
 ---
+
+### 13th July, 2026
+
+Added Images corresponding to each trek detail. 
+
+Fixed a silly mistake which prevented the details beside image to fill up, leaving plain spaces around it.
+
+Dug out a few fields that were sitting in the database doing nothing — Admin now sees each staff's phone number and treks-completed count, staff see their own completed count, and users can finally see which guide is taking them (and how many treks that guide has completed so far).
+
+Caught another silly one — a staff could mark a trek Completed, reopen it, complete it again and farm the count like loyalty points. Made the count symmetric instead: completing adds one, reopening (say, a mis-click) takes it back and restores the bookings.
+
+Fixed minor bugs, better configuration.

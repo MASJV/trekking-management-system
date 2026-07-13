@@ -11,6 +11,7 @@
                     <th>ID</th>
                     <th>Name</th>
                     <th>Email</th>
+                    <th>Phone</th>
                     <th>Status</th>
                     <th>Approve/Remove Staff</th>
                 </tr>
@@ -21,6 +22,7 @@
                     <td>{{staff.staff_id}}</td>
                     <td>{{staff.name}}</td>
                     <td>{{staff.email}}</td>
+                    <td>{{staff.phone_number}}</td>
                     <td>{{staff.status.capitalize()}}</td>
                     <td>
                         <form method="POST" action="{{ url_for('admin.approve_staff', staff_id=staff.staff_id) }}" style="display:inline">

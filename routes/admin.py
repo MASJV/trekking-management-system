@@ -1,10 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, request
 from flask_login import login_required, current_user
-from models import db
-from models.trek import Trek
-from models.user import User
-from models.staff import Staff
-from models.booking import Booking
+from models import db, Trek, User, Staff, Booking
 from datetime import datetime
 
 admin_routes = Blueprint('admin', __name__)
@@ -131,7 +127,7 @@ def edit_trek(trek_id):
             trek.status = request.form['status'].strip()
             trek.start_date = datetime.strptime(request.form['start_date'], '%Y-%m-%d')
             trek.end_date = datetime.strptime(request.form['end_date'], '%Y-%m-%d')
-            
+
         except(KeyError, ValueError):
             return render_template('admin_edit_trek.html', data=request.form, trek_id=trek_id,
                                    error="Please fill all fields with valid values.")

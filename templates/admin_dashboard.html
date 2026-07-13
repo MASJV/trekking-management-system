@@ -2,51 +2,49 @@
 {% block title %}Admin Dashboard{% endblock %}
 {% block content %}
 <div class="container mt-5">
+    <div class="d-flex justify-content-end mb-3">
+        <a href="{{ url_for('auth.logout') }}" class="btn btn-danger btn-sm">Logout</a>
+    </div>
     <div class="row justify-content-center">
         <div class="col-md-3">
-            <h2 class = "text text-center">Admin Dashboard</h2>
-            <p class="text-muted text text-center">Welcome, Admin</p>
+            <h2 class="text-center">Admin Dashboard</h2>
+            <p class="text-muted text-center">Welcome, Admin</p>
             <hr>
         </div>
     </div>
 
     <div class="row g-4">
         <div class="col-md-3">
-            <a href="{{ url_for('admin.manage_treks')}}" class="text-decoration-none text-dark">
-                <div class="card text-center p-3">
-                    <h6 class="text-muted">Total Treks</h6>
-                    <h2>{{ total_treks }}</h2>
-                </div>
-            </a>
+            <div class="card text-center p-3">
+                <h6 class="text-muted">Total Treks</h6>
+                <h2>{{ total_treks }}</h2>
+            </div>
+            <a href="{{ url_for('admin.manage_treks') }}" class="btn btn-info btn-sm mt-2 w-100">Click to view Treks</a>
         </div>
 
         <div class="col-md-3">
-            <a href="{{url_for('admin.manage_users')}}" class="text-decoration-none text-dark">
-                <div class="card text-center p-3">
-                    <h6 class="text-muted">Total Users</h6>
-                    <h2>{{ total_users }}</h2>
-                </div>
-            </a>
+            <div class="card text-center p-3">
+                <h6 class="text-muted">Total Users</h6>
+                <h2>{{ total_users }}</h2>
+            </div>
+            <a href="{{ url_for('admin.manage_users') }}" class="btn btn-info btn-sm mt-2 w-100">Click to view Users</a>
         </div>
 
         <div class="col-md-3">
-            <a href="{{url_for('admin.manage_staff')}}" class="text-decoration-none text-dark">
-                <div class="card text-center p-3">
-                    <h6 class="text-muted">Total Staff</h6>
-                    <h2>{{ total_staff }}</h2>
-                </div>
-            </a>
+            <div class="card text-center p-3">
+                <h6 class="text-muted">Total Staff</h6>
+                <h2>{{ total_staff }}</h2>
+            </div>
+            <a href="{{ url_for('admin.manage_staff') }}" class="btn btn-info btn-sm mt-2 w-100">Click to view Staff</a>
         </div>
-        
+
         <div class="col-md-3">
-            <a href="{{ url_for('admin.manage_bookings') }}" class="text-decoration-none text-dark">
-                <div class="card text-center p-3">
-                    <h6 class="text-muted">Total Bookings</h6>
-                    <h2>{{ total_bookings }}</h2>
-                </div>
-            </a>
+            <div class="card text-center p-3">
+                <h6 class="text-muted">Total Bookings</h6>
+                <h2>{{ total_bookings }}</h2>
+            </div>
+            <a href="{{ url_for('admin.manage_bookings') }}" class="btn btn-info btn-sm mt-2 w-100">Click to view Bookings</a>
         </div>
     </div>
-    <a href="{{ url_for('auth.logout') }}" class="btn btn-danger mt-4">Logout</a>
 </div>
 {% endblock %}

@@ -47,12 +47,15 @@
                     <td>{{user.email}}</td>
                     <td>{{user.is_blacklisted}}</td>
                     <td>
-                        <form method="POST" action="{{ url_for('admin.blacklist_user', user_id=user.user_id) }}" style="display:inline">
-                            <button type="submit" class="btn btn-danger btn-sm">Blacklist</button>
-                        </form>
+                        {% if user.is_blacklisted %}
                         <form method="POST" action="{{ url_for('admin.unblacklist_user', user_id=user.user_id) }}" style="display:inline">
                             <button type="submit" class="btn btn-success btn-sm">UnBlacklist</button>
                         </form>
+                        {% else %}
+                        <form method="POST" action="{{ url_for('admin.blacklist_user', user_id=user.user_id) }}" style="display:inline">
+                            <button type="submit" class="btn btn-danger btn-sm">Blacklist</button>
+                        </form>
+                        {% endif %}
                     </td>
 
                 </tr>

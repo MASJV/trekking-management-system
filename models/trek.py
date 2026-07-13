@@ -12,8 +12,8 @@ class Trek(db.Model):
     assigned_staff_id = db.Column(db.Integer, db.ForeignKey('staff.staff_id'), nullable=True)
     status = db.Column(db.String(20), nullable=False) # pending, approved, open, closed, completed
     start_date = db.Column(db.DateTime, nullable=False)
-    end_date = db.Column(db.DateTime, nullable=False) 
-    price = db.Column(db.Float, nullable=False)  
+    end_date = db.Column(db.DateTime, nullable=False)
+    price = db.Column(db.Float, nullable=False)
 
     def get_details(self):
         return {

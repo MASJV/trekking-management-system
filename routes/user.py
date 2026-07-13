@@ -1,10 +1,6 @@
 from flask import Blueprint, render_template, redirect, request, url_for
 from flask_login import login_required, current_user
-from models import db 
-from models.user import User
-from models.trek import Trek
-from models.booking import Booking
-
+from models import db, Trek, User, Booking
 
 user_routes = Blueprint('user', __name__)
 
@@ -12,7 +8,7 @@ user_routes = Blueprint('user', __name__)
 @login_required
 def user_dashboard():
     if current_user.role != 'user':
-        return "Access Denied", 403 # need to add redirect to login page?
+        return "Access Denied", 403
 
     difficulty = (request.args.get('difficulty') or '').strip().lower()
     location = (request.args.get('location') or '').strip()
@@ -117,7 +113,7 @@ def book_trek(trek_id):
 
     return redirect(url_for('user.booked_treks', trek_id=trek_id))
     
-@user_routes.route('/user/booked_treks') # check out first
+@user_routes.route('/user/booked_treks')
 @login_required
 def booked_treks():
     if current_user.role != 'user':

@@ -1,11 +1,7 @@
 from flask import Blueprint, render_template, redirect, request, url_for
 from flask_login import login_required, current_user
-from models import db 
-from models.staff import Staff
-from models.trek import Trek
-from models.user import User
+from models import db, Trek, User, Staff, Booking
 from datetime import datetime
-from models.booking import Booking
 
 staff_routes = Blueprint('staff', __name__)
 
@@ -15,27 +11,26 @@ def staff_dashboard():
     if current_user.role != 'staff':
         return "Access Denied", 403
     
+    status = (request.args.get('status') or '').strip().lower()
+    location = (request.args.get('location') or '').strip()
+
     assigned_treks_count = len(current_user.treks)
     total_registerred_trekkers = 0
     for trek in current_user.treks:
-        for booking in trek.bookings:
-            if booking.status != "cancelled":
-                total_registerred_trekkers += 1
+        trek.registered_count = sum(1 for b in trek.bookings if b.status != "cancelled")
+        total_registerred_trekkers += trek.registered_count
+
+    treks = current_user.treks
+    if status:
+        treks = [t for t in treks if t.status == status]
+    if location:
+        treks = [t for t in treks if t.location == location]
+
+    locations = sorted({t.location for t in current_user.treks})
 
     return render_template('staff_dashboard.html', assigned_treks_count=assigned_treks_count,
-                           total_registerred_trekkers=total_registerred_trekkers)
-
-@staff_routes.route('/staff/treks')
-@login_required
-def staff_treks():
-    if current_user.role != 'staff':
-        return "Access Denied", 403
-    
-    treks = current_user.treks
-    for trek in treks:
-        trek.registered_count = sum(1 for b in trek.bookings if b.status != 'cancelled')
-
-    return render_template('staff_treks.html', treks=treks)
+                           total_registerred_trekkers=total_registerred_trekkers,
+                           treks=treks, u_status=status, u_location=location, locations=locations)
 
 @staff_routes.route('/staff/treks/<int:trek_id>')
 @login_required
@@ -84,16 +79,22 @@ def update_trek(trek_id):
     new_status = (request.form.get('status') or '').strip().lower()
     new_available_slots = (request.form.get('available_slots') or '').strip()
 
-    if new_status == 'completed':
+    if new_status == 'completed' and trek.status != 'completed':
         if trek.end_date > datetime.now():
             return "Cannot complete a trek before its end date", 400
-        
-        if trek.status != 'completed':
-            current_user.number_of_treks_completed += 1
 
+        current_user.number_of_treks_completed += 1
         for booking in trek.bookings:
             if booking.status != "cancelled":
                 booking.status = "completed"
+
+    # Reopening a trek that was marked completed by mistake
+    elif new_status != 'completed' and trek.status == 'completed':
+        if current_user.number_of_treks_completed > 0:
+            current_user.number_of_treks_completed -= 1
+        for booking in trek.bookings:
+            if booking.status == "completed":
+                booking.status = "booked"
 
     if new_status in ['open', 'closed', 'completed', 'started', 'ongoing']:
         trek.status = new_status

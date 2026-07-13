@@ -2,16 +2,37 @@
 {% block title %}Trek Detail{% endblock %}
 {% block content %}
 <div class="container mt-5">
-    <a href="{{ url_for('user.user_dashboard') }}" class="btn btn-secondary btn-md mb-3">Back to Dashboard</a>
-    <h2 class="text-center">{{ trek.trek_name }}</h2>
-    <ul>
-        <li class="text-center">Difficulty: {{ trek.difficulty }}</li>
-        <li class="text-center">Duration: {{ trek.duration }} days</li>
-        <li class="text-center">Dates: {{ trek.start_date.strftime('%d-%m-%Y') }} to {{ trek.end_date.strftime('%d-%m-%Y') }}</li>
-        <li class="text-center">Price: {{ trek.price }}</li>
-        <li class="text-center">Available slots: {{ trek.available_slots }}</li>
-        <li class="text-center">Status: {{ trek.status }}</li>
-    </ul>
+    <a href="{{ url_for('user.user_dashboard') }}" class="btn btn-secondary mb-3">Back</a>
+    <h2 class="text-center mb-4">{{ trek.trek_name }}</h2>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6 mb-3">
+            <img src="{{ url_for('static', filename=(trek.trek_name | lower | replace(' ', '_')) ~ '.jpg') }}" alt="Trek image" class="img-fluid w-100 object-fit-cover" style="max-height: 400px;">
+        </div>
+        <div class="col-md-6">
+            <table class="table table-bordered h-100">
+                <tbody>
+                    <tr><th>Difficulty</th><td>{{ trek.difficulty | capitalize }}</td></tr>
+                    <tr><th>Duration</th><td>{{ trek.duration }} days</td></tr>
+                    <tr><th>Dates</th><td>{{ trek.start_date.strftime('%d-%m-%Y') }} to {{ trek.end_date.strftime('%d-%m-%Y') }}</td></tr>
+                    <tr><th>Price</th><td>{{ trek.price }}</td></tr>
+                    <tr><th>Available Slots</th><td>{{ trek.available_slots }}</td></tr>
+                    <tr><th>Status</th><td>{{ trek.status | capitalize }}</td></tr>
+                    <tr>
+                        <th>Trek Guide</th>
+                        <td>
+                            {% if trek.staff %}
+                                {{ trek.staff.name }}
+                                <span class="text-muted">({{ trek.staff.number_of_treks_completed }} treks completed)</span>
+                            {% else %}
+                                <span class="text-muted">Not assigned yet</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
     <div class="text-center mt-4">
         {% if trek.status != 'open' or trek.available_slots <= 0 %}

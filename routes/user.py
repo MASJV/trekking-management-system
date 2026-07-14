@@ -121,6 +121,9 @@ def booked_treks():
 
     booked_treks = [Trek.query.get(booking.trek_id) for booking in current_user.bookings if booking.status == "booked"]
 
+    for trek in booked_treks:
+        trek.registered_count = sum(1 for b in trek.bookings if b.status != "cancelled")
+
     return render_template('user_booked_treks.html', treks=booked_treks)
 
 @user_routes.route('/user/booked_treks/<int:trek_id>/cancel', methods=['POST'])

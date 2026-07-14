@@ -27,7 +27,7 @@
                 <td>{{ trek.difficulty | capitalize }}</td>
                 <td>{{ trek.status }}</td>
                 <td>{{ trek.available_slots }}</td>
-                <td>{{ trek.bookings | length }}</td>
+                <td>{{ trek.registered_count }}</td>
                 <td><a href="{{ url_for('user.trek_detail', trek_id=trek.trek_id) }}" class="btn btn-info btn-sm">View in detail</a></td>
                 <td>
                     <form method="POST" action="{{ url_for('user.cancel_booking', trek_id=trek.trek_id) }}">

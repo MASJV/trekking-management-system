@@ -82,6 +82,9 @@ def add_trek():
         except(KeyError, ValueError):
             return render_template('admin_add_trek.html', error="Please fill all fields with valid values.")
 
+        if trek.duration < 1 or trek.available_slots < 0 or trek.price < 0:
+            return render_template('admin_add_trek.html', error="Duration must be at least 1, and slots and price cannot be negative.")
+
         if trek.end_date < trek.start_date:
             return render_template('admin_add_trek.html', error="End date cannot be before start date.")
 
@@ -131,6 +134,10 @@ def edit_trek(trek_id):
         except(KeyError, ValueError):
             return render_template('admin_edit_trek.html', data=request.form, trek_id=trek_id,
                                    error="Please fill all fields with valid values.")
+
+        if trek.duration < 1 or trek.available_slots < 0 or trek.price < 0:
+            return render_template('admin_edit_trek.html', data=request.form, trek_id=trek_id,
+                                   error="Duration must be at least 1, and slots and price cannot be negative.")
 
         if trek.end_date < trek.start_date:
             return render_template('admin_edit_trek.html', data=request.form, trek_id=trek_id,

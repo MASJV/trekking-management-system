@@ -28,4 +28,4 @@ class Trek(db.Model):
             "status": self.status
         }
 
-    bookings = db.relationship('Booking', backref = 'trek', lazy = True)
+    bookings = db.relationship('Booking', backref = 'trek', lazy = True, cascade = 'all, delete-orphan')

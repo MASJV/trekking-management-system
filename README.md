@@ -1,5 +1,64 @@
-# trekking-management-system
-A Trekking Management app where Admin, Trek Staff and Users manage treks, staff assignments and bookings by role.
+# Trekking Management System
+A role-based trekking management application for managing treks, staff assignments, user bookings, payments, and the trek lifecycle through dedicated Admin, Trek Staff, and Trekker workflows.
+
+Developed as part of the Modern Application Development I (MAD1) project at IITM.
+
+Project Statement: [View Project Statement](https://docs.google.com/document/u/3/d/e/2PACX-1vQvgzwz2tFt96B8VApnHqWqlP3LtPDbnxYwAPyr8VOffLCm_Zh2JuTa51z7d1CNJbrZKC0oWPredYcV/pub)
+
+Demo Video: [Watch Project Demo](https://drive.google.com/file/d/1lPMqAqLAwftx0PELTpIJrgMJtcimAC1c/view?usp=sharing)
+
+**Project Grade:** S — 90/100
+
+---
+
+## Run Locally
+
+Clone the repository:
+
+```bash
+git clone https://github.com/MASJV/trekking-management-system.git
+cd trekking-management-system
+```
+
+Create a virtual environment:
+
+```bash
+python -m venv .venv
+```
+
+Activate the virtual environment:
+
+**Windows:**
+
+```bash
+.venv\Scripts\activate
+```
+
+**macOS/Linux:**
+
+```bash
+source .venv/bin/activate
+```
+
+Install the required dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Run the application:
+
+```bash
+python app.py
+```
+
+Open the application in your browser at:
+
+```text
+http://127.0.0.1:5000
+```
+
+The SQLite database and required tables are created automatically when the application starts.
 
 ---
 

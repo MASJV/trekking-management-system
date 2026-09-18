@@ -54,7 +54,8 @@
                     <td>{{staff.trek_ids}}</td>
                     <td>{{staff.number_of_treks_completed}}</td>
                     <td>
-                        <form method="POST" action="{{ url_for('admin.unapprove_staff', staff_id=staff.staff_id) }}" style="display:inline">
+                        <form method="POST" action="{{ url_for('admin.unapprove_staff', staff_id=staff.staff_id) }}" style="display:inline"
+                            onsubmit="return confirm('Are you sure you want to unapprove this staff member? Their trek assignments will be revoked.');">
                             <button type="submit" class="btn btn-danger btn-sm">Unapprove</button>
                         </form>
                     </td>

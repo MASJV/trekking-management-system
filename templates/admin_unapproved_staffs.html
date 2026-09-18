@@ -28,7 +28,8 @@
                         <form method="POST" action="{{ url_for('admin.approve_staff', staff_id=staff.staff_id) }}" style="display:inline">
                             <button type="submit" class="btn btn-success btn-sm">Approve</button>
                         </form>
-                        <form method="POST" action="{{ url_for('admin.delete_staff', staff_id=staff.staff_id) }}" style="display:inline">
+                        <form method="POST" action="{{ url_for('admin.delete_staff', staff_id=staff.staff_id) }}" style="display:inline"
+                            onsubmit="return confirm('Are you sure you want to delete this staff member?');">
                             <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                         </form>
                     </td>

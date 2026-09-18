@@ -60,6 +60,31 @@ http://127.0.0.1:5000
 
 The SQLite database and required tables are created automatically when the application starts.
 
+### Default Admin Login
+
+```text
+Username: admin
+Password: admin123*
+
+Note: These are default credentials intended for running and demonstrating the application locally.
+```
+
+### Trek Images
+
+```text
+The repository includes demo images for the predefined treks.
+
+To display an image for a newly created trek, add a .jpg file to the static/ directory using the trek name in lowercase with spaces replaced by underscores.
+
+Examples:
+
+Everest Base Camp → everest_base_camp.jpg
+Hampta Pass       → hampta_pass.jpg
+Roopkund Trek     → roopkund_trek.jpg
+
+The image filename should correspond to the trek name used in the application.
+```
+
 ---
 
 ### 19 Jun 2026  
